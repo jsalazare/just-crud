@@ -1,5 +1,6 @@
 package com.jsalazar.justcrud.controller
 
+import com.jsalazar.justcrud.Exceptions.UserNotFoundException
 import com.jsalazar.justcrud.common.dbmodel.User
 import com.jsalazar.justcrud.repository.UserRepository
 import org.springframework.data.domain.Sort
@@ -29,7 +30,7 @@ class UserController {
 
     @GetMapping(value="/{id}")
     User getUserById (@PathVariable Long id) {
-        userRepository.findById(id).orElse(null)
+        userRepository.findById(id).orElseThrow({ -> new UserNotFoundException(id) })
     }
 
     @PostMapping(value="/")
