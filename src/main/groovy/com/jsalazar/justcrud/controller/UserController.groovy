@@ -3,6 +3,7 @@ package com.jsalazar.justcrud.controller
 import com.jsalazar.justcrud.Exceptions.UserNotFoundException
 import com.jsalazar.justcrud.common.dbmodel.User
 import com.jsalazar.justcrud.repository.UserRepository
+import com.jsalazar.justcrud.service.UserService
 import org.springframework.data.domain.Sort
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -17,29 +18,29 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/user")
 class UserController {
 
-    UserRepository userRepository
+    UserService userService
 
-    UserController(UserRepository userRepository) {
-        this.userRepository = userRepository
+    UserController(UserService userService) {
+        this.userService = userService
     }
 
-    @GetMapping(value="/")
+    @GetMapping(value="**")
     List<User> getAllUsers (){
-        userRepository.findAll(Sort.by("id"))
+        userService.findAll()
     }
 
     @GetMapping(value="/{id}")
     User getUserById (@PathVariable Long id) {
-        userRepository.findById(id).orElseThrow({ -> new UserNotFoundException(id) })
+        userService.findById(id)
     }
 
-    @PostMapping(value="/")
+    @PostMapping(value="**")
     User postUser (@RequestBody User user){
-        userRepository.save(user)
+        userService.save(user)
     }
 
     @DeleteMapping("/{id}")
     void deleteEmployee(@PathVariable Long id) {
-        userRepository.deleteById(id);
+        userService.deleteById(id)
     }
 }
